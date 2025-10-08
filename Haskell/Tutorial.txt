@@ -1,0 +1,9 @@
+To run a haskell code you can use:
+
+runghc file_name.hs - used to testing
+
+ghc file_name.hs - to final version of the programm(later will be added a
+package with all finished programs
+
+-Wall - flag for ghc to enabling emit warnings about our code
+ghc -Wall file_name.hs -fforce-recomp

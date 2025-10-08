@@ -1,0 +1,10 @@
+allIngredients :: [String] -> String
+allIngredients [] = ""
+allIngredients (x:xs) = x ++ " " ++  allIngredients xs
+
+createPizza :: String -> String -> [String] -> String
+createPizza size typeP ingredients = print("Your "++ size ++" size pizza " ++ typeP ++ " with " ++ allIngredients ingredients ++ "is ready to be served") 
+
+maintype :: IO()
+main = do
+  print(createPizza "M" "Margarita" ["water", "tomato sauce", "flour", "cheese"])

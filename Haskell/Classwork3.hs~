@@ -1,0 +1,13 @@
+factorial :: Int -> Int
+factorial n = if n <= 1 then 1 else n * factorial (n-1)
+
+fac :: Int -> Int
+fac n = fact-iter 1 1 n
+
+fact-iter :: Int -> Int -> Int -> Int
+fact-iter product counter max-count = if counter > max-count then product else fact-iter (counter * product) (counter+1) max-count
+
+main :: IO()
+main = do
+  print (factorial 6)
+  print (fac 6)

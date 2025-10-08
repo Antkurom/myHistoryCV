@@ -1,0 +1,3 @@
+script - protocol writing command (Ctrl-D - to finish protocol)
+chmod +x filename (x - ability to run, w - write, r - read)
+mv currentname.txt newname.txt -to rename a file

@@ -1,0 +1,32 @@
+#!/bin/sh
+
+BAR_LENGTH=20
+COMPLETED=0
+LEFT=0
+COUNTER=-1
+while [ "$COUNTER" -lt 100 ]; do
+	PROGRESS_BAR=""
+	COUNTER=$((COUNTER+1))
+	COMPLETED=$((BAR_LENGTH*COUNTER/100))
+	LEFT=$((BAR_LENGTH-COMPLETED-1))
+	if [ "$LEFT" -eq 0 ]; then
+		PROGRESS_BAR="###################>"
+	else
+	if [ "$COUNTER" -eq 100 ]; then
+		PROGRESS_BAR="####################"
+	else
+		while [ "$COMPLETED" -ne 0 ]; do #-ne not equal
+			PROGRESS_BAR=${PROGRESS_BAR}"#"
+			COMPLETED=$((COMPLETED-1))	
+		done
+		PROGRESS_BAR=${PROGRESS_BAR}">"
+		while [ "$LEFT" -ne 0 ]; do
+			PROGRESS_BAR=${PROGRESS_BAR}" "
+			LEFT=$((LEFT-1))
+		done	
+	fi
+	fi
+	printf "\rProgress: [%s] %d%%" "${PROGRESS_BAR}" "${COUNTER}"
+	sleep 0.3
+done
+echo

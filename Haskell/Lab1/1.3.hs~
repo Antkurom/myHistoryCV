@@ -1,0 +1,33 @@
+import Data.Char
+
+findNotLetter :: Int -> String -> Int
+findNotLetter acc (x:xs) = if isAlpha x then findNotLetter (acc+1) xs else if acc==0 then acc+1 else acc
+
+--sentences :: String -> [String]
+
+
+myWords :: Int -> String -> [String]
+myWords n "" = []
+myWords n str = take n str : myWords (findNotLetter 0 (drop n str)) (drop n str)
+
+reverseString :: String -> String
+reverseString = (\x -> foldr (\y acc -> y ++ acc) "" x) . reve . myWords 0  
+
+isVowel :: Char -> Bool
+isVowel c = foldr(\x acc -> (x==c) || acc ) False "aeuioyAEUIOY"
+
+reve :: [a] -> [a]
+reve = foldl (\acc x -> x : acc) []
+
+toVowel :: String -> String
+toVowel = foldr(\x acc -> if isAlpha x then (if isVowel x then x : acc else acc) else x : acc) "" 
+
+main :: IO()
+main = do
+  putStrLn "Hello, enter your sentence:"
+  string <- getLine
+  putStrLn "Do you want to reverse the order of words in your sentence? Type: Yes - 0, No - anything else"
+  rev <- getLine
+  let newString = toVowel string 
+  print (if rev == "0" then reverseString newString else newString)
+ 

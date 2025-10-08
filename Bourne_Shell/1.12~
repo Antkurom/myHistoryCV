@@ -1,0 +1,8 @@
+#!/bin/sh
+
+START=$(date +%s)
+$*
+END=$(date +%s)
+echo $START
+echo $END
+echo $((END-START))

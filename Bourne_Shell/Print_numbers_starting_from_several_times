@@ -1,0 +1,8 @@
+#!/bin/sh
+N=$1
+M=$2
+while [ $N -lt $(($1+M)) ]; do
+	echo -n $N" "
+	N=$((N+1))
+done
+echo 

@@ -1,0 +1,51 @@
+Example of variable:
+I=10 // no space!
+
+To use variable use $:
+$I
+
+If you want to connect it with another text without space use{}:
+${I}abc
+
+For arithmetical operations use $(()) construction:
+I=$((I+10))
+
+For a variables that user gave use $1, $2, $3, ...
+$0 - mean name of the scrept that user enter to run a program
+$# - mean number of variables user entered.
+You can use also "" atribute for commands that use user variables to restrict
+user give a minus atributes(-a) to the commands. 
+If you want to include space use ""
+$ sign works in "" but not in ''.
+
+Example of if:
+if [ -f "file.txt" ]; then
+	cat "file.txt"
+else
+	echo "File file.txt not found"
+fi
+
+You can use any command as a condition, and if it completes successfully then
+condition is true, else false.
+
+Example of while:
+I=1
+while [ $I -le 100]; do
+	echo $I
+	I=$((I+1))
+done
+
+For standart conditional statements use:
+-le - <=
+-lt - <
+-ge - >=
+-gt - >
+
+exmaple of for loop:
+
+for C in red orange yellow green blue indigo violet; do
+	echo $C
+done
+
+&& - and 
+|| - or
