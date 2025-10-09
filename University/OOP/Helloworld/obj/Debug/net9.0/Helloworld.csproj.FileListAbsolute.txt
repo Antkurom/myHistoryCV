@@ -1,0 +1,15 @@
+/home/Ant/myHistoryCV/University/OOP/Helloworld/bin/Debug/net9.0/Helloworld
+/home/Ant/myHistoryCV/University/OOP/Helloworld/bin/Debug/net9.0/Helloworld.deps.json
+/home/Ant/myHistoryCV/University/OOP/Helloworld/bin/Debug/net9.0/Helloworld.runtimeconfig.json
+/home/Ant/myHistoryCV/University/OOP/Helloworld/bin/Debug/net9.0/Helloworld.dll
+/home/Ant/myHistoryCV/University/OOP/Helloworld/bin/Debug/net9.0/Helloworld.pdb
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.GeneratedMSBuildEditorConfig.editorconfig
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.AssemblyInfoInputs.cache
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.AssemblyInfo.cs
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.csproj.CoreCompileInputs.cache
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.sourcelink.json
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.dll
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/refint/Helloworld.dll
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.pdb
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/Helloworld.genruntimeconfig.cache
+/home/Ant/myHistoryCV/University/OOP/Helloworld/obj/Debug/net9.0/ref/Helloworld.dll
