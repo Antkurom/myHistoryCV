@@ -1,0 +1,24 @@
+#include <iostream>
+
+int main() {
+    int array [] = {3, 5, 2, 5, 9, 1};
+    int size = 6;
+    int beggining = 0;
+    while(beggining != size){
+        int min = beggining;
+        for (int i = beggining+1; i<size; i++){
+            if(array[min] >= array[i]){
+                min = i;
+            }
+        }
+        // swap
+        int temp = array[min];
+        array[min] = array[beggining];
+        array[beggining] = temp;
+        beggining ++;
+    }
+    for(int i = 0; i < size; i++)
+        std::cout << array[i] << " ";
+    return 0;
+}
+
