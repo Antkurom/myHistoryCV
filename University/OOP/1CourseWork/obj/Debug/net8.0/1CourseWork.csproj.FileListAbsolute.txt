@@ -1,0 +1,15 @@
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.GeneratedMSBuildEditorConfig.editorconfig
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.AssemblyInfoInputs.cache
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.AssemblyInfo.cs
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.csproj.CoreCompileInputs.cache
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.sourcelink.json
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/bin/Debug/net8.0/1CourseWork
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/bin/Debug/net8.0/1CourseWork.deps.json
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/bin/Debug/net8.0/1CourseWork.runtimeconfig.json
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/bin/Debug/net8.0/1CourseWork.dll
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/bin/Debug/net8.0/1CourseWork.pdb
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.dll
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/refint/1CourseWork.dll
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.pdb
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/1CourseWork.genruntimeconfig.cache
+/home/Ant/myHistoryCV/University/OOP/1CourseWork/obj/Debug/net8.0/ref/1CourseWork.dll
