@@ -25,7 +25,7 @@ namespace HelloWorld
         }
         
         // Method to be sure cents are 0-99
-        private void Normalize()
+        protected void Normalize()
         {
             if (Cents >= 100)
             {
@@ -34,7 +34,7 @@ namespace HelloWorld
             }
         }
 
-        public void Display()
+        public virtual void Display()
         {
             Console.WriteLine($"This sum is {Euros},{Cents}");
         }
@@ -91,7 +91,7 @@ namespace HelloWorld
             long sumWithoutTax = (long)(totalCents / (1 + taxRate));
             
             long euros = sumWithoutTax / 100;
-            byte cents = (sumWithoutTax % 100);            
+            byte cents = (byte)(sumWithoutTax % 100);            
 
             return new Money(euros, cents);
 
@@ -103,7 +103,7 @@ namespace HelloWorld
             long finalValue = (long)(totalCents * (1 + interestRate));
             
             long euros = finalValue / 100;
-            byte cents = (finalValue % 100);
+            byte cents = (byte)(finalValue % 100);
             
             return new Money(euros, cents);
         }
@@ -121,6 +121,61 @@ namespace HelloWorld
         }
     }
 
+    class CurrencyMoney : Money
+    {
+        public string CurrencyType{ get; set; }
+
+        public float ExchangeRate{ get; set; }
+
+        public CurrencyMoney()
+        {
+            Euros = 0;
+            Cents = 0;
+            CurrencyType = "USD";
+            ExchangeRate = 1;
+        }
+        public CurrencyMoney(long euros)
+        {
+            Euros = euros;
+            Cents = 0;
+            CurrencyType = "USD";
+            ExchangeRate = 1;
+        }
+        public CurrencyMoney(long euros, byte cents)
+        {
+            Euros = euros;
+            Cents = cents;
+            CurrencyType = "USD";
+            ExchangeRate = 1;
+            Normalize();
+        }
+        public CurrencyMoney(long euros, byte cents, string currencyType, float exchangeRate)
+        {
+            Euros = euros;
+            Cents = cents;
+            CurrencyType = currencyType;
+            ExchangeRate = exchangeRate;
+            Normalize();
+        }
+        public override void  Display()
+        {
+            Console.WriteLine($"The amout of money you have is {Euros}.{Cents} {CurrencyType}. Exchange rate to USD is {ExchangeRate}");
+            Normalize();
+        }
+        
+        public CurrencyMoney(Money money, string currencyType, float exchangeRate)
+            : base(money.Euros, money.Cents)
+        {
+            CurrencyType = currencyType;
+            ExchangeRate = exchangeRate;
+        }
+        public void updateExchangeRate(float newExchangeRate)
+        {
+            ExchangeRate = newExchangeRate;
+            Display();
+        }
+    }
+
     class Program
     {
         public static void Main(string[] args)
@@ -128,38 +183,44 @@ namespace HelloWorld
             Console.WriteLine($"The program is running by Anton Kurochkin and current time is {DateTime.Now}");
             Console.WriteLine();
             
-            Money money1 = new Money(100, 50);
-            money1.Display();
+            // Check old functionality
+            CurrencyMoney cmoney1 = new CurrencyMoney(100, 50);
+            cmoney1.Display();
             
-	    money1.Addition(50, 75); 
-            money1.Display();
+	        cmoney1.Addition(50, 75); 
+            cmoney1.Display();
             
-	    money1.Subtraction(50, 30);
-            money1.Display();
+	        cmoney1.Subtraction(50, 30);
+            cmoney1.Display();
             
-	    money1.Subtraction(200, 0); // Should fail
+	        cmoney1.Subtraction(200, 0); // Should fail
             
-	    Money initial = new Money(50);
-            Money current = new Money(75);
+            CurrencyMoney initial = new CurrencyMoney(50);
+            CurrencyMoney current = new CurrencyMoney(75);
             float returnRate = current.InvestmentReturnAnalysis(initial);
             Console.WriteLine($"Return multiplier: {returnRate}");
             
-	    Money priceWithTax = new Money(200);
-            Money priceWithoutTax = priceWithTax.TaxWithholdingCalculations(0.20f);
+            CurrencyMoney priceWithTax = new CurrencyMoney(200);
+            CurrencyMoney priceWithoutTax = new CurrencyMoney(priceWithTax.TaxWithholdingCalculations(0.20f), priceWithTax.CurrencyType, priceWithTax.ExchangeRate);
             priceWithoutTax.Display();
             
-            Money principal = new Money(1000);
-            Money withInterest = principal.InterestAccrualCalculations(0.05f);
+            CurrencyMoney principal = new CurrencyMoney(1000);
+            CurrencyMoney withInterest = new CurrencyMoney(principal.InterestAccrualCalculations(0.05f), principal.CurrencyType, principal.ExchangeRate);
             Console.Write("Amount with 5% interest: ");
             withInterest.Display();
             
-            Money budget = new Money(500);
-            Money spending = new Money(450);
+            CurrencyMoney budget = new CurrencyMoney(500);
+            CurrencyMoney spending = new CurrencyMoney(450);
             budget.BudgetVsActualSpending(spending);
             
-            Money edgeCase = new Money(0, 150); // Should normalize to 1.50
+            CurrencyMoney edgeCase = new CurrencyMoney(0, 150); // Should normalize to 1.50
             Console.Write("150 cents should become: ");
             edgeCase.Display();
-        }
+
+            //Check new functionality
+            CurrencyMoney euroMoney = new CurrencyMoney(25, 25, "EUR", 1.2f);
+            euroMoney.Display();
+
+            euroMoney.updateExchangeRate(1.5f); }
     }
 }
