@@ -1,5 +1,0 @@
-/home/Ant/myHistoryCV/University/OOP/2CourseWork/courseWork2/2CourseWork
-/home/Ant/myHistoryCV/University/OOP/2CourseWork/courseWork2/2CourseWork.dll
-/home/Ant/myHistoryCV/University/OOP/2CourseWork/courseWork2/2CourseWork.deps.json
-/home/Ant/myHistoryCV/University/OOP/2CourseWork/courseWork2/2CourseWork.runtimeconfig.json
-/home/Ant/myHistoryCV/University/OOP/2CourseWork/courseWork2/2CourseWork.pdb
