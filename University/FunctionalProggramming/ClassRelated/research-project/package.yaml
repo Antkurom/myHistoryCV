@@ -1,0 +1,24 @@
+name: research-project
+
+dependencies:
+  - base
+  - http-conduit
+  - aeson
+  - bytestrig
+  - text
+
+executubles:
+  research-project-exe:
+    main: Main.hs
+    source-dirs: src
+    dependencies:
+      - research-project
+      - http-conduit
+      - aeson
+
+tests:
+  research-project-test:
+    main: Spec.hs
+    source-dirs: test
+    dependecies:
+      - research-project
