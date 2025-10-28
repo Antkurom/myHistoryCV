@@ -115,7 +115,7 @@ namespace HelloWorld
             string output;
             
             if (currentSum == spendingSum) { output = "Just enough, but is it worth it?"; }
-            else if (currentSum > spendingSum) { output = $"You have €{(currentSum - spendingSum) / 100.0:F2} more than you spend, good job."; }
+            else if (currentSum > spendingSum) { output = $"You have {(currentSum - spendingSum) / 100.0:F2} more than you spend, good job."; }
             else {  output = $"You spend €{(spendingSum - currentSum) / 100.0:F2} more than you have, please control your spending more."; }
             Console.WriteLine(output);
         }
