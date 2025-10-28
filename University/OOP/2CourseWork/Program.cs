@@ -159,7 +159,7 @@ namespace HelloWorld
         }
         public override void  Display()
         {
-            Console.WriteLine($"The amout of money you have is {Euros}.{Cents} {CurrencyType}. Exchange rate to USD is {ExchangeRate}");
+            Console.WriteLine($"The amount of money you have is {Euros}.{Cents} {CurrencyType}. Exchange rate to USD is {ExchangeRate}");
             Normalize();
         }
         
