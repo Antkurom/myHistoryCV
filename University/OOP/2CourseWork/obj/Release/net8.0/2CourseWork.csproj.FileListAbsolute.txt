@@ -1,0 +1,15 @@
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/bin/Release/net8.0/2CourseWork
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/bin/Release/net8.0/2CourseWork.deps.json
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/bin/Release/net8.0/2CourseWork.runtimeconfig.json
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/bin/Release/net8.0/2CourseWork.dll
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/bin/Release/net8.0/2CourseWork.pdb
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.GeneratedMSBuildEditorConfig.editorconfig
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.AssemblyInfoInputs.cache
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.AssemblyInfo.cs
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.csproj.CoreCompileInputs.cache
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.sourcelink.json
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.dll
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/refint/2CourseWork.dll
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.pdb
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/2CourseWork.genruntimeconfig.cache
+/home/Ant/myHistoryCV/University/OOP/2CourseWork/obj/Release/net8.0/ref/2CourseWork.dll
