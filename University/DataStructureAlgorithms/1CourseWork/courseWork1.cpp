@@ -1,3 +1,4 @@
+// Importing libraries
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -5,6 +6,7 @@
 
 using namespace std;
 
+// Generating dataset for the sorting algorithm
 void generateTestData(string arrayOfStrings[], int*& intArr, string*& strArr, int size) {
     intArr = new int[size];
     strArr = new string[size];
@@ -19,11 +21,13 @@ void generateTestData(string arrayOfStrings[], int*& intArr, string*& strArr, in
     }
 }
 
+// Cleaning the arrays after sorting them for next algorithm
 void cleanupArrays(int* intArr, string* strArr) {
     delete[] intArr;
     delete[] strArr;
 }
 
+// Selection sort function
 void selectionSort(int array[], int size, string realArray[]){
     int begining = 0;
     int comparisons = 0;
@@ -48,10 +52,12 @@ void selectionSort(int array[], int size, string realArray[]){
     cout << endl << "Selection sort resulted number of comparisons with " << size << " size is: " << comparisons << endl;
 }
 
+// Main logic of the brick Sort, was created to don't repeat the code
 void halfsorting(int array[], int size, string realArray[], int & changes, int & comparisons, int sp){
     for(int i = sp; (i+1)<size; i+=2){
         comparisons += 2;
         if(array[i] > array[i+1]){
+			// swap
             int temp = array[i];
             array[i] = array[i+1];
             array[i+1] = temp;
@@ -63,10 +69,12 @@ void halfsorting(int array[], int size, string realArray[], int & changes, int &
     }
 }
 
+// Brick sorting function
 void brickSort(int array[], int size, string realArray[]){
 	int changes = 1;
-    int comparisons = 0;
+    int comparisons = 1;
 	while (changes != 0){
+		comparisons ++;
         changes = 0;
 		// Odd phase
         halfsorting(array, size, realArray, changes, comparisons, 1);
@@ -76,6 +84,7 @@ void brickSort(int array[], int size, string realArray[]){
     cout << endl << "Brick sort resulted number of comparisons with " << size << " size is: " << comparisons << endl;
 }
 
+// Counting sort function
 void countingSort(int array[], int size, string realArray[]){
     int min = array[0];
     int max = array[0];
@@ -142,16 +151,16 @@ void countingSort(int array[], int size, string realArray[]){
     cout << endl << "Counting sort resulted number of comparisons with " << size << " size is: " << comparisons << endl;
 
     // Transfering sorted arrays into initial to be able to prove that all works
-
     for (int i = 0; i < size; i++){
         array[i] = sorted_array[i];
         realArray[i] = sorted_realArray[i];
     }
 }
 
+// Function for asking user what to print numbers, real array or both
 void displayArraysIfYouWant(int array[], int size, string realArray[]){
     int answer;
-    cout << "Type what you what to see: Print numbers - 1, Print original array - 2, Print both - 3: ";
+    cout << "Type what you what to see: Print numbers - 1, Print original array - 2, Print both - 3, Skip this - any other number, Skip all - any other symbol: ";
     cin >> answer;
     if (answer == 1 || answer == 3){
         for(int i = 0; i < size; i ++)
@@ -168,7 +177,8 @@ int main(){
     int size = 0;
     ifstream file("quotes.data");
     string line;
-    if (file.is_open()) {
+    // Calculating size of the file
+	if (file.is_open()) {
         while (getline(file, line)) {
             size ++;
         }
@@ -177,6 +187,7 @@ int main(){
         cerr << "Unable to open file!" << endl;
     }
 
+	// Filling the initial array
     string* arrayOfStrings = new string[size];
     ifstream file1("quotes.data");
     if (file1.is_open()) {
@@ -193,12 +204,16 @@ int main(){
     } else {
         cerr << "Unable to open file!" << endl;
     }
-    
+
+	// Creating pointers for array
     int* numbers = nullptr;
     string* strings = nullptr;
+	// All sizes that will be used
     int sizes[] = {size/3, size/3*2, size};
-    function<void(int [], int, string [])> sortingFunctions[] = {selectionSort, brickSort, countingSort};
+    // Array of the sorting functions
+	function<void(int [], int, string [])> sortingFunctions[] = {selectionSort, brickSort, countingSort};
 
+	// Main functionality
     for(int size : sizes){
         for(auto sortingFunction : sortingFunctions){
             generateTestData(arrayOfStrings, numbers, strings, size);
