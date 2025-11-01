@@ -2,37 +2,73 @@ using System;
 
 namespace HelloWorld
 {
-    public delegate void AdditionHandler(double sum);
-    public delegate void SubstitutionHandler(double sum);
-    public delegate void MessageHandler(string message);
     class Dispatcher
     {
+        public event Action<string, string>? OnInfoDisplay;
+        public event Action<double, double, string>? OnMoneyAdded;
+        public event Action<double, double, string>? OnMoneySubtracted;
+        public event Action<double, double, string>? OnBudgetComparison;
 
+        public void SendInfo(string type, string message)
+        {
+            OnInfoDisplay?.Invoke(type, message);
+        }
+        public void SendMoneyAdded(double valueUsed, double initialSum, string operationType)
+        {
+            OnMoneyAdded?.Invoke(valueUsed, initialSum, operationType);
+        }
+        public void SendMoneySubtracted(double valueUsed, double initialSum, string operationType)
+        {
+            OnMoneySubtracted?.Invoke(valueUsed, initialSum, operationType);
+        }
+        public void SendBudgetComparison(double budget, double price, string message)
+        {
+            onBudgetComparison?.Invoke(budget, price, message);
+        }
     }
+
+    class Loger
+    {
+        public void DisplayInfoOfObject(string type, string message)
+        {
+            Console.WriteLine($"[{type}] {message}");
+        }
+        public void DisplayInfoAboutOperation(double valueUsed, double initialSum, string operationType)
+        {
+            Console.WriteLine($"The {operationType} operation was performed with respect ot the sum of {initialSum} using the value {valueUsed}");
+        }
+    }
+
 
     class Summ
     {
+        protected Dispatcher? dispatcher;
+
         public double Sum { get; set; }
 
         public Summ()
         {
             Sum = 0;
+            dispatcher = Program.MainDispatcher;
         }
         public Summ(double sum)
         {
             Sum = sum;
+            dispatcher = Program.MainDispatcher;
         }
 
         public virtual void Info()
         {
-            Console.WriteLine($"You have {Sum:N2}");
+            dispatcher?.SendInfo("Summ", $"You have {Sum:N2}");
         }
         public virtual void Addition(double anotherSum)
         {
+            dispatcher?.SendMoneyAdded(anotherSum, Sum, "Addition");
             Sum += anotherSum;
         }
         public virtual void Subtraction(double anotherSum)
         {
+            dispatcher?.SendMoneySubtracted(anotherSum, Sum, "Subtraction");
             if (Sum-anotherSum < 0){
                 Console.WriteLine("You don't have so much");
             } else {
@@ -50,27 +86,32 @@ namespace HelloWorld
             Euros = 0;
             Cents = 0;
             Sum = 0;
+            dispatcher = Program.MainDispatcher;
         }
         public Money(long euros) 
         {
             Euros = euros;
             Cents = 0;
             UpdateSum();
+            dispatcher = Program.MainDispatcher;
         }
         public Money(long euros, byte cents) 
         {
             Euros = euros;
             Cents = cents;
             Normalize(); 
+            dispatcher = Program.MainDispatcher;
         }
         public Money(Summ sum) : base(sum.Sum)
         {
             UpdateFromSum();
+            dispatcher = Program.MainDispatcher;
         }
         public Money(double sum)
         {
             Sum = sum;
             UpdateFromSum();
+            dispatcher = Program.MainDispatcher;
         }
         protected void Normalize()
         {
@@ -93,25 +134,22 @@ namespace HelloWorld
 
         public override void Info()
         {
-            Console.WriteLine($"This sum is {Euros},{Cents}");
+            dispatcher?.SendInfo("Money", $"This sum is {Euros},{Cents}");
         }
 
         public override void Addition(double sum)
         {
-            Money addedMoney = new(new Summ(sum));
-            addedMoney.UpdateFromSum();
-            Euros += addedMoney.Euros;
-            Cents += addedMoney.Cents;
-            Normalize();
+            dispatcher?.SendMoneyAdded(sum, Sum, "Addition");
+            Sum += sum;
+            UpdateFromSum();
         }
 
         public override void Subtraction(double sum)
         {   
-            Money substractionMoney = new(new Summ(sum));
-            
-            if (Sum >= substractionMoney.Sum)
+            dispatcher?.SendMoneySubtracted(sum, Sum, "Subtraction");
+            if (Sum >= sum)
             {
-                Sum -= substractionMoney.Sum;
+                Sum -= sum;
                 UpdateFromSum();
             }
             else 
@@ -173,6 +211,7 @@ namespace HelloWorld
             Sum = 0;
             CurrencyType = "USD";
             ExchangeRate = 1;
+            dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(long euros)
         {
@@ -181,6 +220,7 @@ namespace HelloWorld
             Sum = euros;
             CurrencyType = "USD";
             ExchangeRate = 1;
+            dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(long euros, byte cents)
         {
@@ -189,6 +229,7 @@ namespace HelloWorld
             CurrencyType = "USD";
             ExchangeRate = 1;
             Normalize();
+            dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(long euros, byte cents, string currencyType, float exchangeRate)
         {
@@ -197,6 +238,7 @@ namespace HelloWorld
             CurrencyType = currencyType;
             ExchangeRate = exchangeRate;
             Normalize();
+            dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(Money money)
             : base(money.Euros, money.Cents)
@@ -204,6 +246,7 @@ namespace HelloWorld
             CurrencyType = "USD";
             ExchangeRate = 1;
             Normalize();
+            dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(Money money, string currencyType, float exchangeRate)
             : base(money.Euros, money.Cents)
@@ -211,10 +254,11 @@ namespace HelloWorld
             CurrencyType = currencyType;
             ExchangeRate = exchangeRate;
             Normalize();
+            dispatcher = Program.MainDispatcher;
         }
         public override void Info()
         {
-            Console.WriteLine($"Currently you have: {Euros}.{Cents} {CurrencyType} that is {ExchangeRate} to USD");
+            dispatcher?.SendInfo("CurrencyMoney", $"Currently you have: {Euros}.{Cents} {CurrencyType} that is {ExchangeRate} to USD");
         }
         public void updateExchangeRate(float newExchangeRate)
         {
@@ -226,11 +270,21 @@ namespace HelloWorld
 
     class Program
     {
+        public static Dispatcher? MainDispatcher;
+
         public static void Main(string[] args)
         {
             Console.WriteLine($"The program is running by Anton Kurochkin and current time is {DateTime.Now}");
             Console.WriteLine();
             
+            MainDispatcher = new Dispatcher(); // not a local variable, this is field
+            
+            Loger loger = new ();
+
+            MainDispatcher.OnInfoDisplay += loger.DisplayInfoOfObject;
+            MainDispatcher.OnMoneyAdded += loger.DisplayInfoAboutOperation;
+            MainDispatcher.OnMoneySubtracted += loger.DisplayInfoAboutOperation;
+
             Console.WriteLine("Creating CurrencyMoney with 100.50 on balanse.");
             CurrencyMoney cmoney1 = new CurrencyMoney(100, 50);
             cmoney1.Info();
