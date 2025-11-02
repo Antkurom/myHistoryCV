@@ -8,6 +8,11 @@ namespace HelloWorld
         public event Action<double, double, string>? OnMoneyAdded;
         public event Action<double, double, string>? OnMoneySubtracted;
         public event Action<double, double, string>? OnBudgetComparison;
+        public event Action<double, double>? OnInvestmentAnalysis;
+        public event Action<float>? OnEndInvestmentAnalysis;
+        public event Action<double, float>? OnWithholdingCalculation;
+        public event Action<double, float>? OnInterestCalculation;
+        public event Action<float, float>? OnUpdateExchangeRate;
 
         public void SendInfo(string type, string message)
         {
@@ -23,7 +28,27 @@ namespace HelloWorld
         }
         public void SendBudgetComparison(double budget, double price, string message)
         {
-            onBudgetComparison?.Invoke(budget, price, message);
+            OnBudgetComparison?.Invoke(budget, price, message);
+        }
+        public void SendInvestmentAnalysis(double investment, double currentMoney)
+        {
+            OnInvestmentAnalysis?.Invoke(investment, currentMoney);
+        }
+        public void SendEndInvestmentAnalysis(float returnMultiplier)
+        {
+            OnEndInvestmentAnalysis?.Invoke(returnMultiplier);
+        }
+        public void SendWithholdingCalculation(double currentMoney, float taxRate)
+        {
+            OnWithholdingCalculation?.Invoke(currentMoney, taxRate);
+        }
+        public void SendInterestCalculation(double currentMoney, float interestRate)
+        {
+            OnInterestCalculation?.Invoke(currentMoney, interestRate);
+        }
+        public void SendUpdateExchangeRate(float oldER, float newER)
+        {
+            OnUpdateExchangeRate?.Invoke(oldER, newER);
         }
     }
 
@@ -37,8 +62,42 @@ namespace HelloWorld
         {
             Console.WriteLine($"The {operationType} operation was performed with respect ot the sum of {initialSum} using the value {valueUsed}");
         }
+        public void DisplayComparisonInfo(double budget, double price, string message)
+        {
+            Console.WriteLine($"[Comarison operation] Current budget: {budget}; Current price: {price}");
+            Console.WriteLine(message);
+            if(budget >= price)
+            {
+                Console.WriteLine($"There is {budget-price:N2} left after you buy it.");
+            } else
+            {
+                Console.WriteLine($"To buy it, you need {price-budget:N2} to be able to buy it.");
+            }
+        }
+        public void DisplayInvestmentAnalysis(double investment, double currentMoney)
+        {
+            Console.WriteLine($"[Investment Analysis] Investment: {investment}; Money now: {currentMoney}.");
+            Console.WriteLine("How much you get for investment in percentage:");
+        }
+        public void DisplayReturnRate(float returnRate)
+        {
+            Console.WriteLine($"{returnRate}%");
+        }
+        public void DisplayWithholdingCalculation(double currentMoney, float taxRate)
+        {
+            Console.WriteLine($"[Withholding Calculation] Initial price: {currentMoney}; Tax rate: {taxRate}");
+            Console.WriteLine("Expected price without taxes:");
+        }
+        public void DisplayInterestCalculation(double currentMoney, float interestRate)
+        {
+            Console.WriteLine($"[Interest Calculation] Current money: {currentMoney}; Interest rate: {interestRate}");
+            Console.WriteLine("Expected money:");
+        }
+        public void DisplayUpdateExchangeRate(float oldER, float newER)
+        {
+            Console.WriteLine($"Updating exchange rate from {oldER} to {newER}");
+        }
     }
-
 
     class Summ
     {
@@ -131,7 +190,6 @@ namespace HelloWorld
             Euros = (long) Math.Floor(Sum);
             Cents = (byte) Math.Floor((Sum-Euros)*100);
         }
-
         public override void Info()
         {
             dispatcher?.SendInfo("Money", $"This sum is {Euros},{Cents}");
@@ -160,18 +218,21 @@ namespace HelloWorld
 
         public double InvestmentReturnAnalysis(Money initialInvestment)
         {
+            dispatcher?.SendInvestmentAnalysis(initialInvestment.Sum, Sum);
             if (initialInvestment.Sum == 0)
             {
                 Console.WriteLine("Error: Initial investment cannot be zero");
                 return 0;
             }
             
-            double returnMultiplier = Sum / initialInvestment.Sum;
+            float returnMultiplier = (float) (Sum / initialInvestment.Sum);
+            dispatcher?.SendEndInvestmentAnalysis(returnMultiplier);
             return returnMultiplier;
         }
 
         public Money TaxWithholdingCalculations(float taxRate)
         {
+            dispatcher?.SendWithholdingCalculation(Sum, taxRate);
             if (taxRate < 0)
             {
                 Console.WriteLine("Invalid tax rate");
@@ -184,17 +245,18 @@ namespace HelloWorld
 
         public Money InterestAccuralCalculations(float interestRate)
         {
+            dispatcher?.SendInterestCalculation(Sum, interestRate);
             double finalValue = (Sum * (1 + interestRate));
             return new Money(finalValue);
         }
 
-        public void BudgetVsActualSpending(Money spending)
+        public void BudgetVsPrice(Money spending)
         {
             string output;
-            if (Sum == spending.Sum) { output = "Just enough, but is it worth it?"; }
-            else if (Sum > spending.Sum) { output = $"You have {(Sum - spending.Sum) / 100.0:N2} more than you spend, good job."; }
-            else { output = $"You spend €{(spending.Sum - Sum) / 100.0:N2} more than you have, please control your spending more."; }
-            Console.WriteLine(output);
+            if (Sum == spending.Sum) { output = "You have just enouth money to buy it.";}
+            else if (Sum > spending.Sum) { output = "You have money to buy it.";}
+            else { output = "You have not enouth money to buy it.";}
+            dispatcher?.SendBudgetComparison(Sum, spending.Sum, output);
         }
     }
 
@@ -262,6 +324,7 @@ namespace HelloWorld
         }
         public void updateExchangeRate(float newExchangeRate)
         {
+            dispatcher?.SendUpdateExchangeRate(ExchangeRate, newExchangeRate);
             ExchangeRate = newExchangeRate;
             Info();
         }
@@ -284,65 +347,55 @@ namespace HelloWorld
             MainDispatcher.OnInfoDisplay += loger.DisplayInfoOfObject;
             MainDispatcher.OnMoneyAdded += loger.DisplayInfoAboutOperation;
             MainDispatcher.OnMoneySubtracted += loger.DisplayInfoAboutOperation;
+            MainDispatcher.OnInvestmentAnalysis += loger.DisplayInvestmentAnalysis;
+            MainDispatcher.OnEndInvestmentAnalysis += loger.DisplayReturnRate;
+            MainDispatcher.OnWithholdingCalculation += loger.DisplayWithholdingCalculation;
+            MainDispatcher.OnInterestCalculation += loger.DisplayInterestCalculation;
+            MainDispatcher.OnUpdateExchangeRate += loger.DisplayUpdateExchangeRate;
+            
 
-            Console.WriteLine("Creating CurrencyMoney with 100.50 on balanse.");
             CurrencyMoney cmoney1 = new CurrencyMoney(100, 50);
             cmoney1.Info();
             
-            Console.WriteLine("Adding 50.75");
 	        cmoney1.Addition(50.75); 
             cmoney1.Info();
 
-            Console.WriteLine("Substracting 50.30");
 	        cmoney1.Subtraction(50.30);
             cmoney1.Info();
             
-            Console.WriteLine("Substracting 200 to check an edge case.");
 	        cmoney1.Subtraction(200.0); // Should fail
             
-            Console.WriteLine("Checking investment return analysis method if initial is 50 and current is 75");
             CurrencyMoney initial = new CurrencyMoney(50);
             CurrencyMoney current = new CurrencyMoney(75);
-            double returnRate = current.InvestmentReturnAnalysis(initial);
-            Console.WriteLine($"Return multiplier: {returnRate}");
+            float returnRate = (float) current.InvestmentReturnAnalysis(initial);
             
-            Console.WriteLine("Checking tax with holding calculation methond if price with tax is 200 and tax rate is 20%");
             CurrencyMoney priceWithTax = new CurrencyMoney(200);
             CurrencyMoney priceWithoutTax = new CurrencyMoney(priceWithTax.TaxWithholdingCalculations(0.20f));
             priceWithoutTax.Info();
             
-            Console.WriteLine("Cheking interest accural calculation method if principal is 1000.");
             CurrencyMoney principal = new CurrencyMoney(1000);
             CurrencyMoney withInterest = new CurrencyMoney(principal.InterestAccuralCalculations(0.05f), principal.CurrencyType, principal.ExchangeRate);
-            Console.Write("Amount with 5% interest: ");
             withInterest.Info();
             
-            Console.WriteLine("Cheking budget vs actual spending if budget is 500 and spending is 450");
             CurrencyMoney budget = new CurrencyMoney(500);
             CurrencyMoney spending = new CurrencyMoney(450);
-            budget.BudgetVsActualSpending(spending);
+            budget.BudgetVsPrice(spending);
             
-            Console.WriteLine("Cheking if Normalization works if there are 150 cents entered");
             CurrencyMoney edgeCase = new CurrencyMoney(0, 150);
             Console.Write("150 cents should become: ");
             edgeCase.Info();
 
-            Console.WriteLine("Cheking if creating a currency money with all atributes works correctly.");
             CurrencyMoney euroMoney = new CurrencyMoney(25, 25, "EUR", 1.2f);
             euroMoney.Info();
 
-            Console.WriteLine("Cheking if updating the rate is working.");
             euroMoney.updateExchangeRate(1.5f);
 
-            Console.WriteLine("Cheking the summ class work");
             Summ newsum = new(25.259);
             newsum.Info();
 
-            Console.WriteLine("Addition");
             newsum.Addition(24.45);
             newsum.Info();
 
-            Console.WriteLine("Subtraction");
             newsum.Subtraction(30);
             newsum.Info();
         }
