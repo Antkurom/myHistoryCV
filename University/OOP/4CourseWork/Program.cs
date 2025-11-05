@@ -2,7 +2,8 @@ using System;
 
 namespace HelloWorld
 {
-    class Dispatcher
+    // Class Dispatcher that create all events and create a separete function to Invoke this event
+	class Dispatcher
     {
         public event Action<string, string>? OnInfoDisplay;
         public event Action<double, double, string>? OnMoneyAdded;
@@ -52,16 +53,20 @@ namespace HelloWorld
         }
     }
 
+	// Class that now is responsable to show everything in the terminal(almoust all was transefered there)
     class Loger
     {
+		// Method to work with all Info methods from money related classes
         public void DisplayInfoOfObject(string type, string message)
         {
             Console.WriteLine($"[{type}] {message}");
         }
+		// Method for addition and substraction method
         public void DisplayInfoAboutOperation(double valueUsed, double initialSum, string operationType)
         {
             Console.WriteLine($"The {operationType} operation was performed with respect ot the sum of {initialSum:N2} using the value {valueUsed:N2}");
         }
+		// Method for comparison
         public void DisplayComparisonInfo(double budget, double price, string message)
         {
             Console.WriteLine($"[Comarison operation] Current budget: {budget}; Current price: {price}");
@@ -74,37 +79,46 @@ namespace HelloWorld
                 Console.WriteLine($"To buy it, you need {price-budget:N2} to be able to buy it.");
             }
         }
+		// Method for Investment Analysis at the start, to describe what will happen
         public void DisplayInvestmentAnalysis(double investment, double currentMoney)
         {
             Console.WriteLine($"[Investment Analysis] Investment: {investment}; Money now: {currentMoney}.");
             Console.WriteLine("How much you get for investment in percentage:");
         }
+		// Method for end of the Investment Analysis to return the result (I am trying to do tranfer all showing there)
         public void DisplayReturnRate(float returnRate)
         {
             Console.WriteLine($"{returnRate*100}%");
         }
+		// Method for calculating price without taxes
         public void DisplayWithholdingCalculation(double currentMoney, float taxRate)
         {
             Console.WriteLine($"[Withholding Calculation] Initial price: {currentMoney}; Tax rate: {taxRate}");
             Console.WriteLine("Expected price without taxes:");
         }
+		// Method for Interest Calculation
         public void DisplayInterestCalculation(double currentMoney, float interestRate)
         {
             Console.WriteLine($"[Interest Calculation] Current money: {currentMoney}; Interest rate: {interestRate}");
             Console.WriteLine("Expected money:");
         }
+		// Method for Updating Exchange Rate
         public void DisplayUpdateExchangeRate(float oldER, float newER)
         {
             Console.WriteLine($"Updating exchange rate from {oldER} to {newER}");
         }
     }
 
+	// Main maney class, that work only with sums 
     class GSum
     {
+		// Now stores dispatcher for all next classes to trigger events(throught methods) from methods
         protected Dispatcher? dispatcher;
 
+		// Main atribute of the class
         public double Sum { get; set; }
 
+		// Some constructors
         public GSum()
         {
             Sum = 0;
@@ -116,10 +130,12 @@ namespace HelloWorld
             dispatcher = Program.MainDispatcher;
         }
 
+		// Overidable Info metod
         public virtual void Info()
         {
             dispatcher?.SendInfo("GSum", $"You have {Sum:N2}");
         }
+		// Overidable Addition and Subtraction
         public virtual void Addition(double anotherSum)
         {
             dispatcher?.SendMoneyAdded(anotherSum, Sum, "Addition");
@@ -135,11 +151,14 @@ namespace HelloWorld
             }
         }
     }
+	// Initial class of Money 
     class Money : GSum
     {
+		// Main attributes of the class
         public long Euros { get; set; }
         public byte Cents { get; set; }
 
+		// Constructors
         public Money()
         {
             Euros = 0;
@@ -172,6 +191,7 @@ namespace HelloWorld
             UpdateFromSum();
             dispatcher = Program.MainDispatcher;
         }
+		// Methods to udate or check for correct format of the atributs
         protected void Normalize()
         {
             if (Cents >= 100)
@@ -191,6 +211,7 @@ namespace HelloWorld
             Euros = (long) Math.Floor(Sum);
             Cents = (byte) Math.Floor((Sum-Euros)*100);
         }
+		// overided methods
         public override void Info()
         {
             dispatcher?.SendInfo("Money", $"This sum is {Euros},{Cents}");
@@ -217,6 +238,7 @@ namespace HelloWorld
             }
         }
 
+		// Main methods of the class for each there are at least one event
         public double InvestmentReturnAnalysis(Money initialInvestment)
         {
             dispatcher?.SendInvestmentAnalysis(initialInvestment.Sum, Sum);
@@ -261,12 +283,15 @@ namespace HelloWorld
         }
     }
 
+	// The most advanced money class that still didn't impemented till the end
     class CurrencyMoney : Money
     {
+		// New attributs for this class
         public string CurrencyType{ get; set; }
 
         public float ExchangeRate{ get; set; }
 
+		// Constructors 
         public CurrencyMoney()
         {
             Euros = 0;
@@ -305,6 +330,7 @@ namespace HelloWorld
             UpdateSum();
             dispatcher = Program.MainDispatcher;
         }
+		// Constructors for converting from Money class
         public CurrencyMoney(Money money)
             : base(money.Euros, money.Cents)
         {
@@ -323,10 +349,12 @@ namespace HelloWorld
             UpdateSum();
             dispatcher = Program.MainDispatcher;
         }
+		// Overided Info method
         public override void Info()
         {
             dispatcher?.SendInfo("CurrencyMoney", $"Currently you have: {Euros}.{Cents} {CurrencyType} that is {ExchangeRate} to USD");
         }
+		// Only one new method that updates Exchange rate
         public void updateExchangeRate(float newExchangeRate)
         {
             dispatcher?.SendUpdateExchangeRate(ExchangeRate, newExchangeRate);
@@ -337,16 +365,19 @@ namespace HelloWorld
 
 
     class Program
-    {
+    {	
+		// Defining this atribute to store dispatcher object here and then accessing it in every constructor of the classes
         public static Dispatcher? MainDispatcher;
 
         public static void Main(string[] args)
-        {
+        {	
+			// Printing name of the author and time it has been run
             Console.WriteLine($"The program is running by Anton Kurochkin and current time is {DateTime.Now}");
             Console.WriteLine();
             
             MainDispatcher = new Dispatcher(); // not a local variable, this is field
-            
+
+			// Create a loger and subscribing each method to the corresponding event
             Loger loger = new ();
 
             MainDispatcher.OnInfoDisplay += loger.DisplayInfoOfObject;
@@ -359,6 +390,7 @@ namespace HelloWorld
             MainDispatcher.OnUpdateExchangeRate += loger.DisplayUpdateExchangeRate;
             
 
+			// Just running all test, where evrything else will be desribed by loger methods that will be running by events in methods of the money classes
             CurrencyMoney cmoney1 = new CurrencyMoney(100, 50);
             cmoney1.Info();
             
