@@ -99,18 +99,18 @@ namespace HelloWorld
         }
     }
 
-    class Summ
+    class GSum
     {
         protected Dispatcher? dispatcher;
 
         public double Sum { get; set; }
 
-        public Summ()
+        public GSum()
         {
             Sum = 0;
             dispatcher = Program.MainDispatcher;
         }
-        public Summ(double sum)
+        public GSum(double sum)
         {
             Sum = sum;
             dispatcher = Program.MainDispatcher;
@@ -118,7 +118,7 @@ namespace HelloWorld
 
         public virtual void Info()
         {
-            dispatcher?.SendInfo("Summ", $"You have {Sum:N2}");
+            dispatcher?.SendInfo("GSum", $"You have {Sum:N2}");
         }
         public virtual void Addition(double anotherSum)
         {
@@ -135,7 +135,7 @@ namespace HelloWorld
             }
         }
     }
-    class Money : Summ
+    class Money : GSum
     {
         public long Euros { get; set; }
         public byte Cents { get; set; }
@@ -161,7 +161,7 @@ namespace HelloWorld
             Normalize(); 
             dispatcher = Program.MainDispatcher;
         }
-        public Money(Summ sum) : base(sum.Sum)
+        public Money(GSum sum) : base(sum.Sum)
         {
             UpdateFromSum();
             dispatcher = Program.MainDispatcher;
@@ -395,7 +395,7 @@ namespace HelloWorld
 
             euroMoney.updateExchangeRate(1.5f);
 
-            Summ newsum = new(25.259);
+            GSum newsum = new(25.259);
             newsum.Info();
 
             newsum.Addition(24.45);

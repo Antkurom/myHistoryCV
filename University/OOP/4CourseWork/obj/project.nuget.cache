@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "wCFlwncRSw0eSsCjjz49BOBPK/jOKBHV/AZOBjo5SMwmsaBd+wexUxH52wxIFDQX108mH2noy7PTgqo6sak4sQ==",
+  "dgSpecHash": "tzewrKwGsC3XMvu591zAWIUSNLz3Umzl7qc0iy/BWwL5axUU7I0pNnW+mX7Oj6rWZmIvRPQ29YtfeOUazmdc0w==",
   "success": true,
   "projectFilePath": "/home/Ant/myHistoryCV/University/OOP/4CourseWork/4CourseWork.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/home/Ant/.nuget/packages/microsoft.net.illink.tasks/8.0.21/microsoft.net.illink.tasks.8.0.21.nupkg.sha512",
+    "/home/Ant/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/8.0.21/microsoft.netcore.app.runtime.linux-x64.8.0.21.nupkg.sha512",
+    "/home/Ant/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/8.0.21/microsoft.aspnetcore.app.runtime.linux-x64.8.0.21.nupkg.sha512",
+    "/home/Ant/.nuget/packages/microsoft.netcore.app.host.linux-x64/8.0.21/microsoft.netcore.app.host.linux-x64.8.0.21.nupkg.sha512"
+  ],
   "logs": []
 }
