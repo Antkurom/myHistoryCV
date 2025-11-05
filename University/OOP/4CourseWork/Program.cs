@@ -60,7 +60,7 @@ namespace HelloWorld
         }
         public void DisplayInfoAboutOperation(double valueUsed, double initialSum, string operationType)
         {
-            Console.WriteLine($"The {operationType} operation was performed with respect ot the sum of {initialSum} using the value {valueUsed}");
+            Console.WriteLine($"The {operationType} operation was performed with respect ot the sum of {initialSum:N2} using the value {valueUsed:N2}");
         }
         public void DisplayComparisonInfo(double budget, double price, string message)
         {
@@ -81,7 +81,7 @@ namespace HelloWorld
         }
         public void DisplayReturnRate(float returnRate)
         {
-            Console.WriteLine($"{returnRate}%");
+            Console.WriteLine($"{returnRate*100}%");
         }
         public void DisplayWithholdingCalculation(double currentMoney, float taxRate)
         {
@@ -183,7 +183,8 @@ namespace HelloWorld
         }
         protected void UpdateSum()
         {
-            Sum = (double) Euros + Cents / 100;
+            float fractionalPart = (float) Cents;
+            Sum = (double) Euros + fractionalPart / 100;
         }
         protected void UpdateFromSum()
         {
@@ -291,6 +292,7 @@ namespace HelloWorld
             CurrencyType = "USD";
             ExchangeRate = 1;
             Normalize();
+            UpdateSum();
             dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(long euros, byte cents, string currencyType, float exchangeRate)
@@ -300,6 +302,7 @@ namespace HelloWorld
             CurrencyType = currencyType;
             ExchangeRate = exchangeRate;
             Normalize();
+            UpdateSum();
             dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(Money money)
@@ -308,6 +311,7 @@ namespace HelloWorld
             CurrencyType = "USD";
             ExchangeRate = 1;
             Normalize();
+            UpdateSum();
             dispatcher = Program.MainDispatcher;
         }
         public CurrencyMoney(Money money, string currencyType, float exchangeRate)
@@ -316,6 +320,7 @@ namespace HelloWorld
             CurrencyType = currencyType;
             ExchangeRate = exchangeRate;
             Normalize();
+            UpdateSum();
             dispatcher = Program.MainDispatcher;
         }
         public override void Info()
