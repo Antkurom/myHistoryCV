@@ -99,6 +99,13 @@ namespace HelloWorld
         }
     }
 
+    class UserException : Exception
+    {
+        public UserException(string message) : base(message)
+        {
+        }
+    }
+
     class GSum
     {
         protected Dispatcher? dispatcher;
@@ -129,7 +136,7 @@ namespace HelloWorld
         {
             dispatcher?.SendMoneySubtracted(anotherSum, Sum, "Subtraction");
             if (Sum-anotherSum < 0){
-                Console.WriteLine("You don't have so much");
+                throw new UserException("You can't do that. You don't have enouth.");
             } else {
                 Sum -= anotherSum;
             }
@@ -213,7 +220,7 @@ namespace HelloWorld
             }
             else 
             { 
-                Console.WriteLine("Not enough money! Operation failed.");
+                throw new UserException("Not enough money! Operation failed.");
             }
         }
 
@@ -222,8 +229,7 @@ namespace HelloWorld
             dispatcher?.SendInvestmentAnalysis(initialInvestment.Sum, Sum);
             if (initialInvestment.Sum == 0)
             {
-                Console.WriteLine("Error: Initial investment cannot be zero");
-                return 0;
+                throw new UserException("Initial investment cannot be zero.");
             }
             
             float returnMultiplier = (float) (Sum / initialInvestment.Sum);
@@ -236,8 +242,7 @@ namespace HelloWorld
             dispatcher?.SendWithholdingCalculation(Sum, taxRate);
             if (taxRate < 0)
             {
-                Console.WriteLine("Invalid tax rate");
-                return new Money(0, 0);
+                throw new UserException("Invalid tax rate");
             }
             
             double sumWithoutTax = (Sum / (1 + taxRate));
@@ -358,51 +363,147 @@ namespace HelloWorld
             MainDispatcher.OnInterestCalculation += loger.DisplayInterestCalculation;
             MainDispatcher.OnUpdateExchangeRate += loger.DisplayUpdateExchangeRate;
             
+            try
+            {
+                CurrencyMoney cmoney1 = new CurrencyMoney(100, 50);
+                cmoney1.Info();
+                
+                cmoney1.Addition(50.75); 
+                cmoney1.Info();
 
-            CurrencyMoney cmoney1 = new CurrencyMoney(100, 50);
-            cmoney1.Info();
-            
-	        cmoney1.Addition(50.75); 
-            cmoney1.Info();
+                cmoney1.Subtraction(50.30);
+                cmoney1.Info();
+                
+                cmoney1.Subtraction(200.0); // Should fail
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
 
-	        cmoney1.Subtraction(50.30);
-            cmoney1.Info();
+            try
+            {
+                CurrencyMoney initial = new CurrencyMoney(50);
+                CurrencyMoney current = new CurrencyMoney(75);
+                float returnRate = (float) current.InvestmentReturnAnalysis(initial);
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
+            try
+            {
+                CurrencyMoney priceWithTax = new CurrencyMoney(200);
+                CurrencyMoney priceWithoutTax = new CurrencyMoney(priceWithTax.TaxWithholdingCalculations(0.20f));
+                priceWithoutTax.Info();
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
             
-	        cmoney1.Subtraction(200.0); // Should fail
+            try
+            {
+                CurrencyMoney principal = new CurrencyMoney(1000);
+                CurrencyMoney withInterest = new CurrencyMoney(principal.InterestAccuralCalculations(0.05f), principal.CurrencyType, principal.ExchangeRate);
+                withInterest.Info();
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
             
-            CurrencyMoney initial = new CurrencyMoney(50);
-            CurrencyMoney current = new CurrencyMoney(75);
-            float returnRate = (float) current.InvestmentReturnAnalysis(initial);
-            
-            CurrencyMoney priceWithTax = new CurrencyMoney(200);
-            CurrencyMoney priceWithoutTax = new CurrencyMoney(priceWithTax.TaxWithholdingCalculations(0.20f));
-            priceWithoutTax.Info();
-            
-            CurrencyMoney principal = new CurrencyMoney(1000);
-            CurrencyMoney withInterest = new CurrencyMoney(principal.InterestAccuralCalculations(0.05f), principal.CurrencyType, principal.ExchangeRate);
-            withInterest.Info();
-            
-            CurrencyMoney budget = new CurrencyMoney(500);
-            CurrencyMoney spending = new CurrencyMoney(450);
-            budget.BudgetVsPrice(spending);
-            
-            CurrencyMoney edgeCase = new CurrencyMoney(0, 150);
-            Console.Write("150 cents should become: ");
-            edgeCase.Info();
+            try
+            {
+                CurrencyMoney budget = new CurrencyMoney(500);
+                CurrencyMoney spending = new CurrencyMoney(450);
+                budget.BudgetVsPrice(spending);
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
+           
+            try
+            {
+                CurrencyMoney edgeCase = new CurrencyMoney(0, 150);
+                Console.Write("150 cents should become: ");
+                edgeCase.Info();
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
 
-            CurrencyMoney euroMoney = new CurrencyMoney(25, 25, "EUR", 1.2f);
-            euroMoney.Info();
+            try
+            {
+                CurrencyMoney euroMoney = new CurrencyMoney(25, 25, "EUR", 1.2f);
+                euroMoney.Info();
+                euroMoney.updateExchangeRate(1.5f);
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
 
-            euroMoney.updateExchangeRate(1.5f);
+            try
+            {
+                GSum newsum = new(25.259);
+                newsum.Info();
+                newsum.Subtraction(30);
+                newsum.Info();
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
 
-            GSum newsum = new(25.259);
-            newsum.Info();
-
-            newsum.Addition(24.45);
-            newsum.Info();
-
-            newsum.Subtraction(30);
-            newsum.Info();
+            try
+            {
+                Console.Write("Enter a number to make an error in the program(you know what to do): ");
+                int errorNumber = int.Parse(Console.ReadLine());
+                int result = 1/errorNumber;
+            }
+            catch (UserException ex)
+            {
+                Console.WriteLine($"Showing expected error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Showing unexpected error: {ex.Message}");
+            }
         }
     }
 }
