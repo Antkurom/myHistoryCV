@@ -109,7 +109,7 @@ namespace HelloWorld
         }
     }
 
-<<<<<<< HEAD:University/OOP/5CourseWork/Program.cs
+    // Personal Exception class
     class UserException : Exception
     {
         public UserException(string message) : base(message)
@@ -117,9 +117,7 @@ namespace HelloWorld
         }
     }
 
-=======
 	// Main maney class, that work only with sums 
->>>>>>> 9293943cb6dcd7fcdcca62682e5703bb5ef09ccd:University/OOP/4CourseWork/Program.cs
     class GSum
     {
 		// Now stores dispatcher for all next classes to trigger events(throught methods) from methods
@@ -405,7 +403,6 @@ namespace HelloWorld
                 cmoney1.Addition(50.75); 
                 cmoney1.Info();
 
-<<<<<<< HEAD:University/OOP/5CourseWork/Program.cs
                 cmoney1.Subtraction(50.30);
                 cmoney1.Info();
                 
@@ -419,14 +416,12 @@ namespace HelloWorld
             {
                 Console.WriteLine($"Showing unexpected error: {ex.Message}");
             }
-=======
 			// Just running all test, where evrything else will be desribed by loger methods that will be running by events in methods of the money classes
             CurrencyMoney cmoney1 = new CurrencyMoney(100, 50);
             cmoney1.Info();
             
 	        cmoney1.Addition(50.75); 
             cmoney1.Info();
->>>>>>> 9293943cb6dcd7fcdcca62682e5703bb5ef09ccd:University/OOP/4CourseWork/Program.cs
 
             try
             {
